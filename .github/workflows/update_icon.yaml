@@ -20,7 +20,7 @@ jobs:
 
     - name: Fetch App Icon
       run: |
-        curl -o assets/icon.png <https://drive.google.com/file/d/1EJ3_25igyysm5TlsFO5cFq72c6cvMb2F>
+        curl -o assets/icon.png <https://www.designer-daily.com/wp-content/uploads/2013/07/20-app.jpg>
       
     - name: Set up flutter_launcher_icons
       run: flutter pub get
