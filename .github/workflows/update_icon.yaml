@@ -11,12 +11,13 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Install Flutter
       uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.24.3'
+        channel: 'stable'
 
     - name: Fetch App Icon
       run: |
@@ -30,3 +31,7 @@ jobs:
 
     - name: Build APK
       run: flutter build apk --release
+
+    - name: List build directory 
+      run: |
+        ls -l build/app/outputs/flutter-apk
