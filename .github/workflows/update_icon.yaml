@@ -38,7 +38,7 @@ jobs:
         echo "icon_url=$image_url" >> $GITHUB_ENV
 
     - name: Download App Icon
-      run: curl -o app_icon.png ${{ env.icon_url }}
+      run: curl -o assets/app_icon.png ${{ env.icon_url }}
       
     - name: Set up flutter_launcher_icons
       run: flutter pub get
