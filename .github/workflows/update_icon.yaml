@@ -21,13 +21,13 @@ jobs:
 
     - name: Fetch App Icon
       run: |
-        curl -o assets/icon.png <https://www.designer-daily.com/wp-content/uploads/2013/07/20-app.jpg>
+        curl -o assets/app_icon.png https://www.designer-daily.com/wp-content/uploads/2013/07/20-app.jpg
       
     - name: Set up flutter_launcher_icons
       run: flutter pub get
 
     - name: Generate Launcher Icon
-      run: flutter pub run flutter_launcher_icons
+      run: flutter pub run flutter_launcher_icons:main
 
     - name: Build APK
       run: flutter build apk --release
