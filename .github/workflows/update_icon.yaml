@@ -25,9 +25,20 @@ jobs:
         flutter-version: '3.24.3'
         channel: 'stable'
 
-    - name: Fetch App Icon
+    # - name: Fetch App Icon
+    #   run: |
+    #     curl -o assets/app_icon.png https://www.designer-daily.com/wp-content/uploads/2013/07/20-app.jpg
+
+    - name: Fetch App Icon URL
+      id: fetch_icon
       run: |
-        curl -o assets/app_icon.png https://www.designer-daily.com/wp-content/uploads/2013/07/20-app.jpg
+        response=$(curl -s https://673ab6ef339a4ce44518e308.mockapi.io/test/api/v1/image)
+        image_url=$(echo $response | jq -r '.[0].image_url')
+        echo "Image URL: $image_url"
+        echo "icon_url=$image_url" >> $GITHUB_ENV
+
+    - name: Download App Icon
+      run: curl -o app_icon.png ${{ env.icon_url }}
       
     - name: Set up flutter_launcher_icons
       run: flutter pub get
