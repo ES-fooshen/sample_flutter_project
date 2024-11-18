@@ -1,0 +1,38 @@
+name: Update App Icon and Build APK
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  update-icon:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.3'
+
+    - name: Fetch App Icon
+      run: |
+        curl -o assets/icon.png <https://drive.google.com/file/d/1EJ3_25igyysm5TlsFO5cFq72c6cvMb2F>
+      
+    - name: Set up flutter_launcher_icons
+      run: flutter pub get
+
+    - name: Generate Launcher Icon
+      run: flutter pub run flutter_launcher_icons
+
+    - name: Build APK
+      run: flutter build apk --release
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-release.apk
+        path: build/app/outputs/flutter-apk/app-release.apk
