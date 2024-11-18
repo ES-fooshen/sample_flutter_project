@@ -52,6 +52,8 @@ flutter_icons:
   android: true # Override the default existing Flutter launcher icon for Android
   ios: true # Override the default existing Flutter launcher icon for IOS
   image_path: "assets/app_icon.png"
+  adaptive_icon_background: "#ffffff" # used for devices with adaptive theme icon, only available for Android 8.0 devices and above
+  adaptive_icon_foreground: "assets/app_icon.png" # used for devices with adaptive theme icon, only available for Android 8.0 devices and above
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
