@@ -20,11 +20,11 @@ jobs:
         distribution: 'zulu'
         java-version: '17'
 
-    - name: Install Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.24.3'
-        channel: 'stable'
+    # - name: Install Flutter
+    #   uses: subosito/flutter-action@v2
+    #   with:
+    #     flutter-version: '3.24.3'
+    #     channel: 'stable'
         
     - name: Fetch App Info
       run: |
@@ -50,8 +50,8 @@ jobs:
         echo "Current build number: $CURRENT_BUILD_NUMBER"
         echo "New build number: $build_number"
         
-        # sed -i "s/^version: $CURRENT_VERSION\+$CURRENT_BUILD_NUMBER/version: $version\+$build_number/" pubspec.yaml
-        sed -i '' "s/^version: $CURRENT_VERSION\+$CURRENT_BUILD_NUMBER/version: $version\+$build_number/" pubspec.yaml
+        sed -i "s/^version: $CURRENT_VERSION\+$CURRENT_BUILD_NUMBER/version: $version\+$build_number/" pubspec.yaml
+        # sed -i '' "s/^version: $CURRENT_VERSION\+$CURRENT_BUILD_NUMBER/version: $version\+$build_number/" pubspec.yaml
         
         cat pubspec.yaml
 
