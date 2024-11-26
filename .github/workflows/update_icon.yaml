@@ -24,37 +24,61 @@ jobs:
       with:
         flutter-version: '3.24.3'
         channel: 'stable'
+        
+    - name: Fetch App Info
+      run: |
+        response=$(curl --location 'https://673ab6ef339a4ce44518e308.mockapi.io/test/api/v1/build' \
+        --header 'access-token;' \
+        --header 'Authorization: Bearer eyJhbGciOiJFRDI1NTE5In0.eyJpc3MiOiJlYXN5c3RvcmUuY28iLCJqdGkiOiJiZTIyZGViOC04MDk4LTQ2OGQtYWM4Mi1mOWE2ZmRhMTA2NDYiLCJpYXQiOjE3MzI1ODY2NzAsImV4cCI6IjE3MzUyMTY0MTYiLCJhdWQiOiJhZG1pbiIsInN1YiI6Im9OTDJXQjNwIiwic2lkIjoiWk5uTTZtZUcifQ.XAjKgyqHZrz2Ox2qDPRjCOi-Obgh0bZclkOxIGKBvSPrjPB8Pb_fdU1j1VZIGtpIWVYzFa8esteIYZcmrHp1DA')
 
-    # - name: Fetch App Icon
+        version=$(echo $response | jq -r '.[0].version')
+        build_number=$(echo $response | jq -r '.[0].build_number')
+        echo "Version: $version"
+        echo "Build Number: $build_number"
+        
+        echo "version=$version" >> $GITHUB_ENV
+        echo "build_number=$build_number" >> $GITHUB_ENV
+
+    - name: Update version and build number in pubspec.yaml
+      run: |
+        CURRENT_VERSION=$(grep '^version:' pubspec.yaml | awk -F"[:+]" '{print $2}' | xargs)
+        CURRENT_BUILD_NUMBER=$(grep '^version:' pubspec.yaml | awk -F"+" '{print $2}')
+        
+        echo "Current version: $CURRENT_VERSION"
+        echo "New version: $version"
+        echo "Current build number: $CURRENT_BUILD_NUMBER"
+        echo "New build number: $build_number"
+        
+        sed -i "s/^version: $CURRENT_VERSION\+$CURRENT_BUILD_NUMBER/version: $version\+$build_number/" pubspec.yaml
+        
+        cat pubspec.yaml
+
+    # - name: Fetch App Icon URL
+    #   id: fetch_icon
     #   run: |
-    #     curl -o assets/app_icon.png https://www.designer-daily.com/wp-content/uploads/2013/07/20-app.jpg
+    #     response=$(curl -s https://673ab6ef339a4ce44518e308.mockapi.io/test/api/v1/image)
+    #     image_url=$(echo $response | jq -r '.[0].image_url')
+    #     echo "Image URL: $image_url"
+    #     echo "icon_url=$image_url" >> $GITHUB_ENV
 
-    - name: Fetch App Icon URL
-      id: fetch_icon
-      run: |
-        response=$(curl -s https://673ab6ef339a4ce44518e308.mockapi.io/test/api/v1/image)
-        image_url=$(echo $response | jq -r '.[0].image_url')
-        echo "Image URL: $image_url"
-        echo "icon_url=$image_url" >> $GITHUB_ENV
-
-    - name: Download App Icon
-      run: curl -o assets/app_icon.png ${{ env.icon_url }}
+    # - name: Download App Icon
+    #   run: curl -o assets/app_icon.png ${{ env.icon_url }}
       
-    - name: Set up flutter_launcher_icons
-      run: flutter pub get
+    # - name: Set up flutter_launcher_icons
+    #   run: flutter pub get
 
-    - name: Generate Launcher Icon
-      run: flutter pub run flutter_launcher_icons:main
+    # - name: Generate Launcher Icon
+    #   run: flutter pub run flutter_launcher_icons:main
 
-    - name: Build APK
-      run: flutter build apk --release
+    # - name: Build APK
+    #   run: flutter build apk --release
 
-    - name: List build directory 
-      run: |
-        ls -l build/app/outputs/flutter-apk
+    # - name: List build directory 
+    #   run: |
+    #     ls -l build/app/outputs/flutter-apk
     
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-release.apk
-        path: build/app/outputs/flutter-apk/app-release.apk
+    # - name: Upload APK
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: app-release.apk
+    #     path: build/app/outputs/flutter-apk/app-release.apk
