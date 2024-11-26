@@ -49,7 +49,8 @@ jobs:
         echo "Current build number: $CURRENT_BUILD_NUMBER"
         echo "New build number: $build_number"
         
-        sed -i "s/^version: $CURRENT_VERSION\+$CURRENT_BUILD_NUMBER/version: $version\+$build_number/" pubspec.yaml
+        # sed -i "s/^version: $CURRENT_VERSION\+$CURRENT_BUILD_NUMBER/version: $version\+$build_number/" pubspec.yaml
+        sed -i '' "s/^version: $CURRENT_VERSION\+$CURRENT_BUILD_NUMBER/version: $version\+$build_number/" pubspec.yaml
         
         cat pubspec.yaml
 
